@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>three js tutorial - red staple - 01 </title>
+    <script src="three.min.js"></script>
+
+</head>
+
+<body>
+    <script>
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        const renderer = new THREE.WebGLRenderer({
+            antialias: true
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
+
+        //Create a DirectionalLight and turn on shadows for the light
+        const light = new THREE.DirectionalLight(0xffffff, 1, 100);
+        light.position.set(1, 1, 1); //default; light shining from top
+        light.castShadow = true; // default false
+        scene.add(light);
+
+        //Set up shadow properties for the light
+        light.shadow.mapSize.width = 512; // default
+        light.shadow.mapSize.height = 512; // default
+        light.shadow.camera.near = 0.5; // default
+        light.shadow.camera.far = 500; // default
+
+        //Create a sphere that cast shadows (but does not receive them)
+        const sphereGeometry = new THREE.SphereGeometry(5, 50, 50);
+        const sphereMaterial = new THREE.MeshStandardMaterial({
+            color: 0xff0000
+        });
+        const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        sphere.castShadow = true; //default is false
+        sphere.receiveShadow = false; //default
+        scene.add(sphere);
+
+        //Create a plane that receives shadows (but does not cast them)
+        const planeGeometry = new THREE.PlaneGeometry(20, 20, 32, 32);
+        const planeMaterial = new THREE.MeshStandardMaterial({
+            color: 0x00ff00
+        })
+        const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+        plane.receiveShadow = true;
+        scene.add(plane);
+
+        //Create a helper for the shadow camera (optional)
+        const helper = new THREE.CameraHelper(light.shadow.camera);
+        // scene.add(helper);
+
+        sphere.position.z = -30;
+        sphere.rotation.x = 10;
+        sphere.rotation.y = 5;
+        sphere.rotation.z = 0;
+
+        renderer.render(scene, camera);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>three js tutorial - red staple - 01 </title>
+    <script src="three.min.js"></script>
+
+</head>
+
+<body>
+    <script>
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight);
+
+        var renderer = new THREE.WebGLRenderer({
+            antialias: true
+        });
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.append(renderer.domElement);
+
+        const geometry = new THREE.BoxGeometry(2, 2, 2);
+        var material = new THREE.MeshBasicMaterial({
+            color: 0xff00000
+        });
+        var obj = new THREE.Mesh(geometry, material);
+        scene.add(obj);
+
+        var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.x = 3;
+        directionalLight.position.y = 4;
+        directionalLight.position.z = 4;
+        scene.add(directionalLight);
+
+        scene.fog = new THREE.Fog(0xffffff, 0, 20000);
+        renderer.setClearColor(scene.fog.color, 1);
+
+        obj.position.z = -7;
+        obj.rotation.x = 10;
+        obj.rotation.y = 5;
+        obj.rotation.z = 0;
+
+
+        var animate = function() {
+            obj.rotation.y -= 0.01;
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+
+</html>
